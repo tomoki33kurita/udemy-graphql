@@ -4,8 +4,9 @@ import { Query } from "react-apollo";
 import client from "./client";
 import { SEARCH_REPOSITORIES } from "./graphql";
 
+const PER_PAGE = 5;
 const DEFAULT_STATE = {
-  first: 5,
+  first: PER_PAGE,
   after: null,
   last: null,
   before: null,
@@ -19,7 +20,8 @@ const App = () => {
     setVariables({ ...default_state, query: e.target.value });
 
   const handleSubmit = (e) => e.preventDefault();
-  console.log({ query });
+  const handleGoNext = (search) =>
+    setVariables({ ...default_state, after: search.pageInfo.endCursor });
   return (
     <ApolloProvider client={client}>
       <form onSubmit={(e) => handleSubmit(e)}>
@@ -44,12 +46,19 @@ const App = () => {
               <ul>
                 {search.edges.map((edge) => (
                   <li key={edge.node.id}>
-                    <a href={edge.node.url} target="_blank">
+                    <a
+                      href={edge.node.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       {edge.node.name}
                     </a>
                   </li>
                 ))}
               </ul>
+              {search.pageInfo.hasNextPage ? (
+                <button onClick={() => handleGoNext(search)}>Next</button>
+              ) : null}
             </React.Fragment>
           );
         }}
