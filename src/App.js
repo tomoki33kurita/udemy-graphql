@@ -15,13 +15,14 @@ const DEFAULT_STATE = {
 const App = () => {
   const [default_state, setVariables] = React.useState(DEFAULT_STATE);
   const { query, first, last, before, after } = default_state;
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setVariables({ ...default_state, query: e.target.value });
-  };
+
+  const handleSubmit = (e) => e.preventDefault();
   console.log({ query });
   return (
     <ApolloProvider client={client}>
-      <form>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <input value={query} onChange={(e) => handleChange(e)} />
       </form>
       <Query
