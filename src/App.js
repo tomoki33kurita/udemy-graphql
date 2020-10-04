@@ -38,7 +38,20 @@ const App = () => {
             repositoryCount === 1 ? "Repository" : "Repositories";
           const title = `GitHub Repositories Search Results - ${repositoryCount} ${repositoryUnit}`;
 
-          return <h2>{title}</h2>;
+          return (
+            <React.Fragment>
+              <h2>{title}</h2>
+              <ul>
+                {search.edges.map((edge) => (
+                  <li key={edge.node.id}>
+                    <a href={edge.node.url} target="_blank">
+                      {edge.node.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </React.Fragment>
+          );
         }}
       </Query>
     </ApolloProvider>
