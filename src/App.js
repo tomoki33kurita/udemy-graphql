@@ -22,6 +22,14 @@ const App = () => {
   const handleSubmit = (e) => e.preventDefault();
   const handleGoNext = (search) =>
     setVariables({ ...default_state, after: search.pageInfo.endCursor });
+  const handleGoPrevious = (search) =>
+    setVariables({
+      ...default_state,
+      first: null,
+      after: null,
+      last: PER_PAGE,
+      before: search.pageInfo.startCursor,
+    });
   return (
     <ApolloProvider client={client}>
       <form onSubmit={(e) => handleSubmit(e)}>
@@ -56,6 +64,11 @@ const App = () => {
                   </li>
                 ))}
               </ul>
+              {search.pageInfo.hasPreviousPage ? (
+                <button onClick={() => handleGoPrevious(search)}>
+                  Previous
+                </button>
+              ) : null}
               {search.pageInfo.hasNextPage ? (
                 <button onClick={() => handleGoNext(search)}>Next</button>
               ) : null}
