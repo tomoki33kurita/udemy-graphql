@@ -4,6 +4,11 @@ import { Query } from "react-apollo";
 import client from "./client";
 import { SEARCH_REPOSITORIES } from "./graphql";
 
+const StarButton = ({ node }) => {
+  const totalCount = node.stargazers.totalCount;
+  return <button>{totalCount === 1 ? "1 star" : `${totalCount} stars`}</button>;
+};
+
 const PER_PAGE = 5;
 const DEFAULT_STATE = {
   first: PER_PAGE,
@@ -61,6 +66,8 @@ const App = () => {
                     >
                       {edge.node.name}
                     </a>
+
+                    <StarButton node={edge.node}></StarButton>
                   </li>
                 ))}
               </ul>
