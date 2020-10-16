@@ -54,16 +54,16 @@ const DEFAULT_STATE = {
   after: null,
   last: null,
   before: null,
-  query: "フロントエンドエンジニア",
+  query: "",
 };
 
 const App = () => {
   const [default_state, setVariables] = React.useState(DEFAULT_STATE);
   const { query, first, last, before, after } = default_state;
-  const handleChange = (e) =>
-    setVariables({ ...default_state, query: e.target.value });
-
-  const handleSubmit = (e) => e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setVariables({ ...default_state, query: myRef.current.value });
+  };
   const handleGoNext = (search) =>
     setVariables({ ...default_state, after: search.pageInfo.endCursor });
   const handleGoPrevious = (search) =>
@@ -74,10 +74,13 @@ const App = () => {
       last: PER_PAGE,
       before: search.pageInfo.startCursor,
     });
+  const myRef = React.createRef();
+
   return (
     <ApolloProvider client={client}>
       <form onSubmit={(e) => handleSubmit(e)}>
-        <input value={query} onChange={(e) => handleChange(e)} />
+        <input ref={myRef} />
+        <input type="submit" value="suubmit" />
       </form>
       <Query
         query={SEARCH_REPOSITORIES}
